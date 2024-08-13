@@ -2,6 +2,11 @@ const express = require('express');
 require('dotenv/config');
 const app = express();
 const port = 3000;
+const cors = require('cors'); // Import the cors package
+const corsOptions = {
+  credentials: true,
+  origin: ['http://localhost:3000', 'http://localhost:3001'] // Whitelist the domains you want to allow
+};
 const mongoose = require('mongoose');
 const uri = `mongodb+srv://${process.env.MONGO_DB}:${process.env.MONGO_PASSWORD_CLUSTER}@clusterblog.nhgcy.mongodb.net/?retryWrites=true&w=majority&appName=ClusterBlog`;
 const { authorModel, blogModel } = require('./models');
@@ -98,6 +103,7 @@ mongoose.connect(uri, {
 })
   .then(() => {
     console.log('Connection success');
+    app.use(cors(corsOptions));
     app.listen(port, () => {
       console.log(`Server listen on http://localhost:${port}`);
     });
